@@ -3,9 +3,13 @@ let todos = [];
 
 function getItems() {
     var xhttp = new XMLHttpRequest();
+    console.log("getItems");
     xhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
-            document.getElementById("todos").innerHTML = this.responseText;
+          data = JSON.parse(this.responseText);
+          data.forEach(item => {
+            _displayItems(item);
+          });
         }
     };
     xhttp.open("GET", uri, true);
