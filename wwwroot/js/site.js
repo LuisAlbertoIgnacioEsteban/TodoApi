@@ -2,20 +2,30 @@ const uri = 'api/TodoItems';
 let todos = [];
 
 function getItems() {
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            document.getElementById("todos").innerHTML = this.responseText;
+        }
+    };
+    xhttp.open("GET", uri, true);
+    xhttp.send();
+  /*
   fetch(uri)
     .then(response => response.json())
     .then(data => _displayItems(data))
     .catch(error => console.error('Unable to get items.', error));
+    */
 }
 
 function addItem() {
   const addNameTextbox = document.getElementById('add-name');
-
   const item = {
-    isComplete: false,
+    isComplete: true,
     name: addNameTextbox.value.trim()
   };
 
+  /*
   fetch(uri, {
     method: 'POST',
     headers: {
@@ -30,14 +40,38 @@ function addItem() {
       addNameTextbox.value = '';
     })
     .catch(error => console.error('Unable to add item.', error));
+    */
+
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            document.getElementById("todos").innerHTML = this.responseText;
+        }
+    };
+    xhttp.open("POST", uri, true);
+    xhttp.setRequestHeader("Accept", "application/json");
+    xhttp.setRequestHeader("Content-type", "application/json");
+    xhttp.send("id=1&name="+item.name+"&isComplete=true&secret=yes");
 }
 
 function deleteItem(id) {
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            document.getElementById("todos").innerHTML = getItems();
+        }
+    };
+    xhttp.open("DELETE", uri, true);
+    xhttp.setRequestHeader("Accept", "application/json");
+    xhttp.setRequestHeader("Content-type", "application/json");
+    xhttp.send("id="+id);
+/*
   fetch(`${uri}/${id}`, {
     method: 'DELETE'
   })
   .then(() => getItems())
   .catch(error => console.error('Unable to delete item.', error));
+  */
 }
 
 function displayEditForm(id) {
